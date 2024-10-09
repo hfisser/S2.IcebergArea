@@ -1,5 +1,5 @@
 # S2.IcebergArea
-Detect icebergs and sea ice floes in Sentinel-2 data, delineate their above-waterline area, and distinguish icebergs from sea ice.
+Detect icebergs and sea ice floes in Sentinel-2 data, delineate their above-waterline area, and distinguish icebergs and sea ice floes.
 
 ### Citation
 Publication..
@@ -32,5 +32,10 @@ Sentinel-2 level 1C data.
 A geopandas GeoDataFrame. The GeoDataFrame contains the delineated iceberg and sea ice outlines, reflectance statistics, and the above-waterline area.
 
 ### Algorithm
+The algorithm separates ice from water via a reflectance threshold in the near-infrared band (B8) provided in reflectance in the 0-1 range:
+
+$$iceberg = B08 >= 0.12$$
+
+Connected pixels exceeding the threshold are grouped as ice feature. After this initial separation, a random forest classification model predicts whether the individual ice features are icebergs or sea ice floes. The model uses reflectance in the blue band (B2) and in the near-infrared (B8) to distinguish icebergs and sea ice.
 
 ### Background
