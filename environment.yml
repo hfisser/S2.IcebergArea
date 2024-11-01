@@ -1,0 +1,16 @@
+name: s2icebergarea
+dependencies:
+  - python=3.8
+  - rasterio=1.2.10
+  - gdal=3.0.2
+  - conda-forge::geopandas=0.12.2
+  - pip
+  - fiona=1.8.22
+  - numpy=1.23.5
+  - scikit-image=0.19.3
+  - scikit-learn=1.2.0
+  - scipy=1.10.0
+  - pip:
+    - rasterstats==0.20.0
+    - s2cloudless
+    - shapely==1.8.4

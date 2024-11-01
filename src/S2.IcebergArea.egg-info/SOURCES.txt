@@ -1,0 +1,16 @@
+README.md
+setup.py
+src/S2.IcebergArea.egg-info/PKG-INFO
+src/S2.IcebergArea.egg-info/SOURCES.txt
+src/S2.IcebergArea.egg-info/dependency_links.txt
+src/S2.IcebergArea.egg-info/requires.txt
+src/S2.IcebergArea.egg-info/top_level.txt
+src/S2IcebergArea/S2IcebergArea.py
+src/S2IcebergArea/__init__.py
+src/S2IcebergArea/io/IO.py
+src/S2IcebergArea/io/__init__.py
+src/S2IcebergArea/model/IcebergBlues_RFC_model.pickle
+src/S2IcebergArea/model/__init__.py
+src/S2IcebergArea/s2_preprocessing/S2Prep.py
+src/S2IcebergArea/s2_preprocessing/__init__.py
+test/test.py
