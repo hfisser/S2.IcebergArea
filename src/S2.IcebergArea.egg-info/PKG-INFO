@@ -5,13 +5,7 @@ Summary: Package detecting icebergs in Sentinel-2, delineate their area, and dis
 Author: Henrik Fisser
 Author-email: henrik.fisser@uit.no
 License: Tbd
-Requires-Dist: s2cloudless
-Requires-Dist: numpy==1.23.5
-Requires-Dist: rasterio==1.2.10
-Requires-Dist: rasterstats==0.20.0
-Requires-Dist: scikit-image==0.19.3
-Requires-Dist: scikit-learn==1.2.0
-Requires-Dist: scipy==1.10.0
+License-File: LICENSE
 
 # S2.IcebergArea
 Detect icebergs and sea ice floes in Sentinel-2 data, delineate their above-waterline area, and distinguish icebergs and sea ice floes.

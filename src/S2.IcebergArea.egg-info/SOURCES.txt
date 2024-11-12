@@ -1,3 +1,4 @@
+LICENSE
 README.md
 setup.py
 src/S2.IcebergArea.egg-info/PKG-INFO
