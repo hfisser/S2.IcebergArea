@@ -8,12 +8,9 @@ dir_safe = "/media/henrik/DATA/S2B_MSIL1C_20240918T140039_N0511_R010_T25WER_2024
 
 TEST_PREP = False
 TEST_PROC = True
-file_s2 = "/media/henrik/DATA/raster/s2/40XDP/S2A_MSIL1C_20190824T104621_N0208_R051_T40XDP_20190824T112605_pB2.08.jp2"
-file_s2 = "/media/henrik/DATA/raster/s2/25WER/S2B_MSIL1C_20180824T140729_N0206_R053_T25WER_20180824T192016_pB2.06.jp2"
-#file_s2 = "/media/henrik/DATA/raster/s2/22WDC/S2B_MSIL1C_20240922T151839_N0511_R068_T22WDC_20240922T201356_pB5.11.jp2"
-#file_s2 = "/media/henrik/DATA/raster/s2/39XVJ/S2A_MSIL1C_20230702T114641_N0509_R023_T39XVJ_20230702T153122_pB5.09.jp2"
-file_s2 = "/media/henrik/DATA/raster/s2/40XEK/S2B_MSIL1C_20240511T085559_N0510_R007_T40XEK_20240511T091626_pB5.1.jp2"
-#file_s2 = "/media/henrik/DATA/raster/s2/41XNF/S2A_MSIL1C_20240801T084601_N0511_R107_T41XNF_20240801T105020_pB5.11.jp2"
+
+file_s2 = "/media/henrik/DATA/raster/s2/25WER/S2A_MSIL1C_20160823T135032_N0500_R110_T25WER_20230929T041536_pB5.0.jp2"
+#file_s2 = "/media/henrik/DATA/raster/s2/25WER/S2A_MSIL1C_20190801T140021_N0208_R010_T25WER_20190801T155646_pB2.08.jp2"
 
 aoi = gpd.read_file("/home/henrik/Output/icebergs/validation/{tile_id}/ocean_buffered_300.0_{tile_id}.gpkg".format(tile_id=os.path.basename(os.path.dirname(file_s2))))
 #aoi = gpd.read_file("/media/henrik/DATA/aoi_tmp_s2.gpkg").to_crs(aoi.crs).clip(aoi)

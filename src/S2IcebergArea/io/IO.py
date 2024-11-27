@@ -33,7 +33,8 @@ class IO:
         #data = np.float32(data * REFLECTANCE_SCALING)  # scale to 0-1 range
         data[data == 0] = np.nan  # new nodata value
         data[:, np.sum(~np.isfinite(data), 0) > 0] = np.nan  # new nodata value
-        data[data > 2] = np.nan
+        data[data > 2] = np.nan  # technically not greater than 1
+        data[data > 1] = 1
         return data, meta
 
     @staticmethod
@@ -43,12 +44,18 @@ class IO:
             if aoi is None:
                 data = src.read(indexes)
             else:
-                data, transform = mask(src, list(aoi.to_crs(meta["crs"]).geometry), crop=True, nodata=0, indexes=indexes)
-                meta.update(transform=transform, height=data.shape[1], width=data.shape[2])
-        data = np.float32(data * REFLECTANCE_SCALING)  # scale to 0-1 range
+                geoms = list(aoi.to_crs(meta["crs"]).geometry)
+                data = []
+                for i, idx in enumerate(indexes):
+                    band, transform = mask(src, geoms, nodata=0, indexes=idx, crop=True)
+                    data.append(band)
+                data = np.float32(data) * REFLECTANCE_SCALING
+                meta.update(transform=transform, height=data.shape[-2], width=data.shape[-1])
+        #data = np.float32(data * REFLECTANCE_SCALING)  # scale to 0-1 range
         data[data == 0] = np.nan  # new nodata value
-        data[:, np.sum(~np.isfinite(data), 0) > 0] = np.nan  # new nodata value
-        data[data > 1] = np.nan
+        #data[:, np.sum(~np.isfinite(data), 0) > 0] = np.nan  # new nodata value
+        data[data > 2] = np.nan  # technically not greater than 1
+        data[data > 1] = 1
         return data, meta
 
     @staticmethod
