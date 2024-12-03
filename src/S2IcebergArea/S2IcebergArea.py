@@ -88,18 +88,17 @@ class S2IcebergArea:
         self.data_s2 = self._mask_clouds(self.file_s2, aoi, self.data_s2, cloud_probability_threshold)
         ice = self._ice()
 
-        meta = self.meta_s2.copy()
-        meta.update(count=1, dtype=ice.dtype, driver="GTiff")
-        with rio.open("/media/henrik/DATA/ice_0.tif", "w", **meta) as dst:
-            dst.write(ice, 1)
-
+        #meta = self.meta_s2.copy()
+        #meta.update(count=1, dtype=ice.dtype, driver="GTiff")
+        #with rio.open("/media/henrik/DATA/ice_0.tif", "w", **meta) as dst:
+            #dst.write(ice, 1)
 
         ice = self._flag_bright_ice_objects(ice)
 
-        meta = self.meta_s2.copy()
-        meta.update(count=1, dtype=ice.dtype, driver="GTiff")
-        with rio.open("/media/henrik/DATA/ice_1.tif", "w", **meta) as dst:
-            dst.write(ice, 1)
+        #meta = self.meta_s2.copy()
+        #meta.update(count=1, dtype=ice.dtype, driver="GTiff")
+        #with rio.open("/media/henrik/DATA/ice_1.tif", "w", **meta) as dst:
+            #dst.write(ice, 1)
 
         #self.data_s2 = None
         if np.max(ice) == 0:
@@ -141,12 +140,12 @@ class S2IcebergArea:
         ice_polygons.crs = subset.crs
         subset = None
         ice_polygons.index = list(range(len(ice_polygons)))
-        subset_mask = ice_polygons["area"] >= MAXIMUM_SIZE
+        #subset_mask = ice_polygons["area"] >= MAXIMUM_SIZE
         #subset_mask = self._flag_uncertain_ice_objects(ice_polygons)
-        if sum(subset_mask) > 0:
-            logging.info("Classifying uncertain ice features")
-            classified = self._classify_melange(ice_polygons, subset_mask, cloud_probability_threshold)
-            ice_polygons = ice_polygons if classified is None else classified
+        #if sum(subset_mask) > 0:
+            #logging.info("Classifying uncertain ice features")
+            #classified = self._classify_melange(ice_polygons, subset_mask, cloud_probability_threshold)
+            #ice_polygons = ice_polygons if classified is None else classified
         #logging.info("Reclassifying")
         #ice_polygons = self._reclassify(ice_polygons)
         #ice_polygons = self._reclassify_spatially(ice_polygons)
@@ -195,7 +194,7 @@ class S2IcebergArea:
         logging.info("Masking clouds")
         self.data_s2 = self._mask_clouds(self.file_s2, ice_polygons_uncertain, self.data_s2, cloud_probability_threshold)
         logging.info("Calculating reflectance difference")
-        md_icebergs = (convolve(self.data_s2, np.ones((19, 19)) / 19 ** 2) - MEANS_ICEBERGS[3]) / STDS_ICEBERGS[3]
+        md_icebergs = (convolve(self.data_s2, np.ones((9, 9)) / 9 ** 2) - MEANS_ICEBERGS[3]) / STDS_ICEBERGS[3]
         logging.info("Segmenting")
         ice = self._segment_kmeans(md_icebergs)
         self.data_s2 = None
@@ -296,13 +295,13 @@ class S2IcebergArea:
         logging.info("Elapsed predicting: {}".format((datetime.now() - t0).total_seconds()))
         #ice_polygons["predicted_ice_feature_int"] = np.ones(len(ice_polygons)) * np.int8(proba[:, 0] < classification_probability_threshold)  # 0: iceberg, 1: sea ice
         condition_rf = np.int8(proba[:, 0] < classification_probability_threshold)        
-        gp_condition_0 = np.int8(ice_polygons["perimeter_index_sf"] < 0.3)
+        gp_condition_0 = np.int8(ice_polygons["perimeter_index_sf"] < 0.1)
         gp_condition_1 = np.int8(ice_polygons["length_root_length_ratio_sf"] < 0.1)
         gp_condition = (gp_condition_0 + gp_condition_1) > 0
         #gp_min_condition = np.int8(geometric_params.min(0) < 0.6)
         ice_polygons["predicted_ice_feature_int"] = np.int8((condition_rf + gp_condition) > 0)  # if 1: sea ice
         #ice_polygons["predicted_ice_feature_int"] = np.int8(np.mean([proba[:, 0], gp_mean], axis=0) < classification_probability_threshold)
-        ice_polygons.loc[np.bool8(proba[:, 0] >= 0.95), "predicted_ice_feature_int"] = 0
+        #ice_polygons.loc[np.bool8(proba[:, 0] >= 0.9), "predicted_ice_feature_int"] = 0
         ice_polygons.loc[ice_polygons["predicted_ice_feature_int"] == 0, "predicted_ice_feature_name"] = "iceberg"
         ice_polygons.loc[ice_polygons["predicted_ice_feature_int"] == 1, "predicted_ice_feature_name"] = "sea_ice"
         ice_polygons["probability_iceberg"] = proba[:, 0]
