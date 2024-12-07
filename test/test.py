@@ -9,10 +9,10 @@ dir_safe = "/media/henrik/DATA/S2B_MSIL1C_20240918T140039_N0511_R010_T25WER_2024
 TEST_PREP = False
 TEST_PROC = True
 
-file_s2 = "/media/henrik/DATA/raster/s2/25WER/S2A_MSIL1C_20170804T141011_N0500_R053_T25WER_20230829T152854_pB5.0.jp2"
+file_s2 = "/media/henrik/DATA/raster/s2/25WER/S2A_MSIL1C_20190615T141011_N0500_R053_T25WER_20230609T074637_pB5.0.jp2"
 
 aoi = gpd.read_file("/home/henrik/Output/icebergs/validation/{tile_id}/ocean_buffered_300.0_{tile_id}.gpkg".format(tile_id=os.path.basename(os.path.dirname(file_s2))))
-aoi = gpd.read_file("/media/henrik/DATA/aoi_tmp_s2.gpkg")
+#aoi = gpd.read_file("/media/henrik/DATA/aoi_tmp_s2.gpkg")
 
 dir_out = "/home/henrik/Output/icebergs/validation/s2_iceberg_detection"
 

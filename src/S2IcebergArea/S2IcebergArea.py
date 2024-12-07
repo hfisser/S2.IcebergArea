@@ -74,7 +74,7 @@ class S2IcebergArea:
         self.file_s2 = S2Prep().preprocess_s2(dir_safe, dir_out, ["B08", "B04", "B03", "B02"])
         return self.file_s2
 
-    def run_model(self, file_s2=None, aoi=None, cloud_probability_threshold=5):
+    def run_model(self, file_s2=None, aoi=None, cloud_probability_threshold=5, max_n_ice_objects=np.inf):
         """
         Delineate ice features, distinguish icebergs and sea ice.
         :param: file_s2 str file path of preprocessed Sentinel-2 data.
@@ -93,12 +93,15 @@ class S2IcebergArea:
         #with rio.open("/media/henrik/DATA/ice_0.tif", "w", **meta) as dst:
             #dst.write(ice, 1)
 
-        ice = self._flag_bright_ice_objects(ice)
+        ice, n = self._flag_bright_ice_objects(ice)
 
-        #meta = self.meta_s2.copy()
-        #meta.update(count=1, dtype=ice.dtype, driver="GTiff")
-        #with rio.open("/media/henrik/DATA/ice_1.tif", "w", **meta) as dst:
-            #dst.write(ice, 1)
+        if n > max_n_ice_objects:
+            return
+
+        meta = self.meta_s2.copy()
+        meta.update(count=1, dtype=ice.dtype, driver="GTiff")
+        with rio.open("/media/henrik/DATA/ice_1.tif", "w", **meta) as dst:
+            dst.write(ice, 1)
 
         #self.data_s2 = None
         if np.max(ice) == 0:
@@ -374,8 +377,9 @@ class S2IcebergArea:
         values = np.unique(labels[diff_b2 >= 1].flatten())
         ice = np.int8(np.isin(labels, values[values != 0]))
         labels = measure.label(ice == 1)
-        logging.info("Filtered number of ice objects: {}".format(len(np.unique(labels))))
-        return ice
+        n = len(np.unique(labels))
+        logging.info("Filtered number of ice objects: {}".format(n))
+        return ice, n
 
     def _calc_geometrical_parameters(self, polygons):
         polygons["length"] = Parallel(n_jobs=N_JOBS)(delayed(self._calculate_length)(polygon) for polygon in polygons.geometry)
